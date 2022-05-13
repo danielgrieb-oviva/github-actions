@@ -6,6 +6,6 @@ jobs:
   deploy-branch:
     runs:
       using: "composite"
-    steps:
-      - name: Print
-        run: echo 'Running using composite'
+      steps:
+        - name: Print
+          run: echo 'Running using composite'
