@@ -11,6 +11,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
       - name: Print
         run: branch_name=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p') && echo $branch_name
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Copy to gh-pages branch
+        run: |
+          npm install
+          node --version
+          npm run build
+          cp -r ./build ~/build
+          git checkout gh-pages
+          # echo $branch_name
+          # mv ~/build ./$branch_name
