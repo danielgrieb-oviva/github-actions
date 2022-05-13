@@ -24,5 +24,5 @@ jobs:
           npm run build
           cp -r ./build ~/build
           git checkout gh-pages
-          # echo $branch_name
-          # mv ~/build ./$branch_name
+          echo $branch_name
+          mv ~/build ./$branch_name
