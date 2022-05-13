@@ -7,5 +7,11 @@ jobs:
     runs:
       using: "composite"
       steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Print
+          run: echo 'DO somethiong'
+        - name: Use Node.js 16
+          uses: actions/setup-node@v3
         - name: Print
           run: echo 'Running using composite'

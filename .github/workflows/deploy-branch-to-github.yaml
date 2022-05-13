@@ -10,8 +10,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # - name: Run custom action
-      #   uses: ./.github/actions/deploy-branch
+      - name: Print
+        run: echo 'DO somethiong'
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Run custom action
+        uses: ./.github/actions/deploy-branch
       # run: echo $GITHUB_WORKSPACE
 
     # steps:
@@ -19,8 +25,7 @@ jobs:
     #   uses: actions/checkout@v2
     # - name: Print
     #   run: branch_name=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p') && echo $branch_name
-    # - name: Use Node.js 16
-    #   uses: actions/setup-node@v3
+
     #   with:
     #     node-version: 16
     # - name: Copy to gh-pages branch
