@@ -8,13 +8,9 @@ jobs:
   deploy-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Print
-        run: pwd && ls ./.github/actions/deploy-branch.yaml
-      - name: Use custom action
-        uses: ./.github/actions/deploy-branch.yaml
-      # run: echo $GITHUB_WORKSPACE
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-branch
+        # run: echo $GITHUB_WORKSPACE
 
     # steps:
     # - name: Checkout
