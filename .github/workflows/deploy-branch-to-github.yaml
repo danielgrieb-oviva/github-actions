@@ -8,9 +8,11 @@ jobs:
   deploy-branch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/deploy-branch
-        # run: echo $GITHUB_WORKSPACE
+      - name: Checkout
+        uses: actions/checkout@v2
+      # - name: Run custom action
+      #   uses: ./.github/actions/deploy-branch
+      # run: echo $GITHUB_WORKSPACE
 
     # steps:
     # - name: Checkout
