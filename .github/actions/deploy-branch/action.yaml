@@ -2,16 +2,32 @@ name: Deploy branch
 
 description: Deploy branch to gh-pages branch
 
-jobs:
-  deploy-branch:
-    runs:
-      using: "composite"
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Print
-          run: echo 'DO somethiong'
-        - name: Use Node.js 16
-          uses: actions/setup-node@v3
-        - name: Print
-          run: echo 'Running using composite'
+inputs:
+  branch-name:
+    description: "Branch name"
+    default: "main"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Use Node.js 16
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    - name: Echo context
+      run: echo "$GITHUB_CONTEXT"
+# jobs:
+#   deploy-branch:
+#     runs:
+#       # using: "composite"
+#       steps:
+#         - name: Checkout
+#           uses: actions/checkout@v2
+# - name: Print
+#   run: echo 'DO somethiong'
+# - name: Use Node.js 16
+#   uses: actions/setup-node@v3
+# - name: Print
+#   run: echo 'Running using composite'
