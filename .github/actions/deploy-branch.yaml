@@ -1,0 +1,11 @@
+name: Deploy branch
+
+description: Deploy branch to gh-pages branch
+
+jobs:
+  deploy-branch:
+    runs:
+      using: "composite"
+    steps:
+      - name: Print
+        run: echo 'Running using composite'
