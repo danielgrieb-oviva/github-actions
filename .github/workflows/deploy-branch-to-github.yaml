@@ -13,7 +13,7 @@ jobs:
       - name: Print
         run: pwd && ls ./.github/actions/deploy-branch.yaml
       - name: Use custom action
-        uses: ./.github/actions/deploy-branch
+        uses: ./.github/actions/deploy-branch.yaml
       # run: echo $GITHUB_WORKSPACE
 
     # steps:
