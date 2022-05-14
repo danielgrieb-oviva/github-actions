@@ -10,14 +10,19 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Use Node.js 16
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-    - name: Echo context
-      run: echo "$GITHUB_CONTEXT"
+    - name: Print branch name
+      run: echo ${{ github.event.pull_request }}
+      shell: bash
+    - name: Print etwas
+      run: echo "${{ github.head_ref }}"
+      shell: bash
+
+    # - name: Use Node.js 16
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: 16
+    # - name: Echo context
+    #   run: echo
 # jobs:
 #   deploy-branch:
 #     runs:
