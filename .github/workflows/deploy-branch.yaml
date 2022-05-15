@@ -33,7 +33,7 @@ jobs:
           npm install --silent
           npm run build --silent
           cp -r ${BUILD_DIR} ~/${BUILD_DIR}
-          git add . && git commit -m 'update' && git checkout ${TARGET_BRANCH}
+          git switch -f ${TARGET_BRANCH}
           rm -rf ./${TICKET_NAME}
           mv ~/${BUILD_DIR} ./${TICKET_NAME}
       - name: Update open-pr list
