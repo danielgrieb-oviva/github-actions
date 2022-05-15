@@ -23,7 +23,7 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           scope: "@oviva-ag"
       - name: token
-      - uses: actions/labeler@v2
+        uses: actions/labeler@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set branch name
