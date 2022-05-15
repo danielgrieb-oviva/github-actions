@@ -11,6 +11,7 @@ jobs:
     env:
       TARGET_BRANCH: gh-pages
       BUILD_DIR: build
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
