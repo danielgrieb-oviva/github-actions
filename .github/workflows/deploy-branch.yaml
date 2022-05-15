@@ -23,8 +23,6 @@ jobs:
           echo "TICKET_NAME=$(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')" >> ${GITHUB_ENV}
       - name: Fetch
         run: |
-          echo $TICKET_NAME
-          echo ${TICKET_NAME}
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git config --global user.name 'danielgrieb-oviva'
           git config --global user.email 'danielgrieb@oviva.com'
@@ -34,6 +32,8 @@ jobs:
           npm install --silent
           sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
           npm run build --silent
+          rm -rf ~/${TICKET_NAME}
+          mkdir ${TICKET_NAME}
           cp -r ${BUILD_DIR} ~/${TICKET_NAME}
           git stash
           git checkout ${TARGET_BRANCH}
