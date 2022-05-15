@@ -27,14 +27,13 @@ jobs:
           echo "TICKET_NAME=$(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')" >> ${GITHUB_ENV}
       - name: Fetch
         run: |
-          git remote set-url origin https://git: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@github.com/${GITHUB_REPOSITORY}.git
+          # git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git config --global user.name 'danielgrieb-oviva'
           git config --global user.email 'danielgrieb@oviva.com'
           git fetch
       - name: Update gh-pages branch with new build
         run: |
           npm install --silent
-          echo GITHUB_TOKEN=${GITHUB_TOKEN}
           sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
           npm run build --silent
           # rm -rf ~/${TICKET_NAME}
