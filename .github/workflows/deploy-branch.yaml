@@ -36,15 +36,9 @@ jobs:
           npm install --silent
           sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
           npm run build --silent
-          # rm -rf ~/${TICKET_NAME}
-          # mkdir ~/${TICKET_NAME}
-          # cp -r ${BUILD_DIR} ~/${TICKET_NAME}
-          # git stash
-          # git checkout ${TARGET_BRANCH}
-          # git pull
-          # rm -rf ./${TICKET_NAME}
-          # mv ~/${TICKET_NAME} ./${TICKET_NAME}
           git switch --force ${TARGET_BRANCH}
+          echo ${BUILD_DIR}
+          echo ${TICKET_NAME}
           mv -f ./${BUILD_DIR} ./${TICKET_NAME}
       - name: Push changes
         run: |
