@@ -40,7 +40,7 @@ jobs:
           # git pull
           # rm -rf ./${TICKET_NAME}
           # mv ~/${TICKET_NAME} ./${TICKET_NAME}
-          git checkout ${TARGET_BRANCH}
+          git switch --force ${TARGET_BRANCH}
           mv ./${BUILD_DIR} ./${TICKET_NAME}
       - name: Push changes
         run: |
