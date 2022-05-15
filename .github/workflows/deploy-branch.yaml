@@ -33,7 +33,7 @@ jobs:
           npm install --silent
           npm run build --silent
           cp -r ${BUILD_DIR} ~/${BUILD_DIR}
-          git switch -f ${TARGET_BRANCH}
+          git stash && git checkout ${TARGET_BRANCH}
           rm -rf ./${TICKET_NAME}
           mv ~/${BUILD_DIR} ./${TICKET_NAME}
       - name: Update open-pr list
@@ -44,5 +44,6 @@ jobs:
           echo "<a href="http://oviva-ag.github.io/${GITHUB_REPOSITORY}/${TICKET_NAME}">${TICKET_NAME}</a>" >> ./open-pull-requests/index.html
       - name: Push changes
         run: |
-          git add . && git commit -m "Deployed build to ${TARGET_BRANCH}"
+          git status
+          git add ./${BUILD_DIR}/* ./open-pull-requests/index.html && git commit -m "Deployed build"
           git push origin ${TARGET_BRANCH}
