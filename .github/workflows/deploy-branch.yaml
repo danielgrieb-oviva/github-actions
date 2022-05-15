@@ -27,7 +27,8 @@ jobs:
           echo "TICKET_NAME=$(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')" >> ${GITHUB_ENV}
       - name: Fetch
         run: |
-          # git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git branch --show-current
+          echo $(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')
           git config --global user.name 'danielgrieb-oviva'
           git config --global user.email 'danielgrieb@oviva.com'
           git fetch
@@ -37,8 +38,6 @@ jobs:
           sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
           npm run build --silent
           git switch --force ${TARGET_BRANCH}
-          git branch --show-current
-          echo $(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')
           echo ${BUILD_DIR}
           echo ${TICKET_NAME}
           rm -rf ./${TICKET_NAME}
