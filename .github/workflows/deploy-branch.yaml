@@ -33,7 +33,7 @@ jobs:
           sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
           npm run build --silent
           rm -rf ~/${TICKET_NAME}
-          mkdir ${TICKET_NAME}
+          mkdir ~/${TICKET_NAME}
           cp -r ${BUILD_DIR} ~/${TICKET_NAME}
           git stash
           git checkout ${TARGET_BRANCH}
