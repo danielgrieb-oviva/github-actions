@@ -39,7 +39,7 @@ jobs:
           git switch --force ${TARGET_BRANCH}
           echo ${BUILD_DIR}
           echo ${TICKET_NAME}
-          mv -f ./${BUILD_DIR} ./${TICKET_NAME}
+          rm -r ./${TICKET_NAME} && mv ./${BUILD_DIR} ./${TICKET_NAME}
       - name: Push changes
         run: |
           git add ./${TICKET_NAME}/* && git commit -m "Build deployed"
