@@ -27,20 +27,18 @@ jobs:
           git config --global user.name 'danielgrieb-oviva'
           git config --global user.email 'danielgrieb@oviva.com'
           git fetch
-      - name: Update TARGET_BRANCH with new build
+      - name: Update gh-pages branch with new build
         run: |
           npm install --silent
           sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
           npm run build --silent
           cp -r ${BUILD_DIR} ~/${TICKET_NAME}
-          git stash && git checkout ${TARGET_BRANCH}
+          git stash
+          git checkout ${TARGET_BRANCH}
+          git pull
           rm -rf ./${TICKET_NAME}
           mv ~/${TICKET_NAME} ./${TICKET_NAME}
-      - name: Update open-pr list
-        # if: ${{ github.event.pull_request.opened  == 'true' && $BRANCH_NAME != 'main' }}
-        run: |
-          mkdir -p ./open-pull-requests
-          touch ./open-pull-requests/index.html
       - name: Push changes
         run: |
+          git add ./${TICKET_NAME}/* && git commit -m "Build deployed"
           git push --force origin ${TARGET_BRANCH}
