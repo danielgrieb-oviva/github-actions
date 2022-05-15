@@ -11,7 +11,6 @@ jobs:
     env:
       TARGET_BRANCH: gh-pages
       BUILD_DIR: build
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -31,19 +30,17 @@ jobs:
       - name: Update TARGET_BRANCH with new build
         run: |
           npm install --silent
+          sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
           npm run build --silent
-          cp -r ${BUILD_DIR} ~/${BUILD_DIR}
+          cp -r ${BUILD_DIR} ~/${TICKET_NAME}
           git stash && git checkout ${TARGET_BRANCH}
           rm -rf ./${TICKET_NAME}
-          mv ~/${BUILD_DIR} ./${TICKET_NAME}
+          mv ~/${TICKET_NAME} ./${TICKET_NAME}
       - name: Update open-pr list
         # if: ${{ github.event.pull_request.opened  == 'true' && $BRANCH_NAME != 'main' }}
         run: |
           mkdir -p ./open-pull-requests
           touch ./open-pull-requests/index.html
-          echo "<a href="http://oviva-ag.github.io/${GITHUB_REPOSITORY}/${TICKET_NAME}">${TICKET_NAME}</a>" >> ./open-pull-requests/index.html
       - name: Push changes
         run: |
-          git status
-          git add ./${BUILD_DIR}/* ./open-pull-requests/index.html && git commit -m "Deployed build"
-          git push origin ${TARGET_BRANCH}
+          git push --force origin ${TARGET_BRANCH}

@@ -7,7 +7,8 @@ on:
 jobs:
   delete-branch:
     runs-on: ubuntu-18.04
-
+    env:
+      TARGET_BRANCH: "gh-pages"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -18,19 +19,14 @@ jobs:
       - name: Set branch name
         run: |
           echo "BRANCH_NAME=$(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')" >> $GITHUB_ENV
-      - name: Log branch name
-        run: echo $BRANCH_NAME
       - name: Delete branch
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git config --global user.name 'danielgrieb-oviva'
           git config --global user.email 'danielgrieb@oviva.com'
           git fetch
+          git stash
           git checkout $TARGET_BRANCH
           rm -rf ./$BRANCH_NAME
-          sed -i '/^$BRANCH_NAME:.*/id' ./open-pull-requests/index.html
           git diff-index --quiet HEAD ||  git commit -am "remove branch $BRANCH_NAME"
-          git push origin $TARGET_BRANCH
-        env:
-          TARGET_BRANCH: "gh-pages"
-          GITHUB_TOKEN: "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"
+          git push --force origin $TARGET_BRANCH
