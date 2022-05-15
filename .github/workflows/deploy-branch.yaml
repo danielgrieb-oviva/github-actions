@@ -43,5 +43,6 @@ jobs:
           mv ./${BUILD_DIR} ./${TICKET_NAME}
       - name: Push changes
         run: |
-          git add ./${TICKET_NAME}/* && git commit -m "Build deployed"
+          git add ./${TICKET_NAME}/*
+          git diff-index --quiet HEAD || git commit -am "deploy static files"
           git push --force origin ${TARGET_BRANCH}
