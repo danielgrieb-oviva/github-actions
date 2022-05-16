@@ -2,6 +2,7 @@ name: Deploy branch to gh-pages branch
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   deploy-branch:
@@ -9,7 +10,8 @@ jobs:
     env:
       TARGET_BRANCH: gh-pages
       BUILD_DIR: build
-      # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -17,24 +19,29 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          # always-auth: true
-          # registry-url: "https://npm.pkg.github.com"
-          # scope: "@oviva-ag"
+          always-auth: true
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@oviva-ag"
+      - name: Set issue key
+        run: |
+          echo "ISSUE_KEY=${PR_BRANCH_NAME##*/}" >> ${GITHUB_ENV}
       - name: Fetch
         run: |
-          echo TOKEN $GITHUB_TOKEN
+          echo ISSUE_KEY is ${ISSUE_KEY}
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git config --global user.name 'danielgrieb-oviva'
           git config --global user.email 'danielgrieb@oviva.com'
-          git fetch
+          git fetch origin ${TARGET_BRANCH}:${TARGET_BRANCH}
       - name: Update gh-pages branch with new build
         run: |
           npm install --silent
+          sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
           npm run build --silent
-          git switch --froce ${TARGET_BRANCH}
+          git switch --force ${TARGET_BRANCH}
           git add ./${BUILD_DIR}
           git stash --keep-index -u
-          mv ./${BUILD_DIR}
+          rm -rf ./${ISSUE_KEY}
+          mv ./${BUILD_DIR} ./${ISSUE_KEY}
       - name: Push changes
         run: |
           git add .
