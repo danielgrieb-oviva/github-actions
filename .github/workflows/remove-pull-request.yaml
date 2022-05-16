@@ -6,9 +6,10 @@ on:
 
 jobs:
   delete-branch:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env:
       TARGET_BRANCH: "gh-pages"
+      PR_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -16,17 +17,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          always-auth: true
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@oviva-ag"
       - name: Set branch name
         run: |
-          echo "BRANCH_NAME=$(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')" >> $GITHUB_ENV
+          echo "ISSUE_KEY=${PR_BRANCH_NAME##*/}" >> ${GITHUB_ENV}
       - name: Delete branch
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git config --global user.name 'danielgrieb-oviva'
           git config --global user.email 'danielgrieb@oviva.com'
-          git fetch
+          git fetch origin ${TARGET_BRANCH}:${TARGET_BRANCH}
+          git switch --force ${TARGET_BRANCH}
           git stash
-          git checkout $TARGET_BRANCH
-          rm -rf ./$BRANCH_NAME
+          rm -rf ./${ISSUE_KEY}
           git diff-index --quiet HEAD ||  git commit -am "remove branch $BRANCH_NAME"
-          git push --force origin $TARGET_BRANCH
+          git push origin $TARGET_BRANCH

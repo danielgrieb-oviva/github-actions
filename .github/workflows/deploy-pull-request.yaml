@@ -1,4 +1,4 @@
-name: Deploy branch to gh-pages branch
+name: Rmove deploy pull request
 
 on:
   pull_request:
@@ -35,7 +35,7 @@ jobs:
       - name: Update gh-pages branch with new build
         run: |
           npm install --silent
-          sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
+          # sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
           npm run build --silent
           git switch --force ${TARGET_BRANCH}
           git add ./${BUILD_DIR}
@@ -46,4 +46,4 @@ jobs:
         run: |
           git add .
           git diff-index --quiet HEAD || git commit -am "deploy static files"
-          git push --force origin ${TARGET_BRANCH}
+          git push origin ${TARGET_BRANCH}

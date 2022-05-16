@@ -26,7 +26,7 @@ jobs:
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git config --global user.name 'danielgrieb-oviva'
           git config --global user.email 'danielgrieb@oviva.com'
-          git fetch
+          git fetch origin main:main
       - name: Update gh-pages branch with new build
         run: |
           npm install --silent
@@ -42,4 +42,4 @@ jobs:
         run: |
           git add .
           git diff-index --quiet HEAD || git commit -am "deploy static files"
-          git push --force origin ${TARGET_BRANCH}
+          git push origin ${TARGET_BRANCH}
