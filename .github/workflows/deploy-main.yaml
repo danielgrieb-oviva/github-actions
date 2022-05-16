@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy-branch:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env:
       TARGET_BRANCH: gh-pages
       BUILD_DIR: build
@@ -23,6 +23,7 @@ jobs:
           scope: "@oviva-ag"
       - name: Fetch
         run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git config --global user.name 'danielgrieb-oviva'
           git config --global user.email 'danielgrieb@oviva.com'
           git fetch
@@ -30,14 +31,13 @@ jobs:
         run: |
           npm install --silent
           npm run build --silent
-          cp ./${BUILD_DIR}
-          git checkout ${TARGET_BRANCH}
+          git switch --force ${TARGET_BRANCH}
           git add ./${BUILD_DIR}
           git stash --keep-index -u
           find ./ -maxdepth 1 -type f -delete
-          rm -r ./static
+          rm -rf ./static
           mv ./${BUILD_DIR}/* ./
-          rm ./${BUILD_DIR}
+          rm -rf ./${BUILD_DIR}
       - name: Push changes
         run: |
           git add .

@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy-branch:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env:
       TARGET_BRANCH: gh-pages
       BUILD_DIR: build

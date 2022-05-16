@@ -1,49 +1,49 @@
-name: Deploy branch to gh-pages branch
+# name: Deploy branch to gh-pages branch
 
-on:
-  push:
-    branches: [main]
-  pull_request:
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
 
-jobs:
-  deploy-branch:
-    runs-on: ubuntu-18.04
-    env:
-      TARGET_BRANCH: gh-pages
-      BUILD_DIR: build
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Use Node.js 16
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          always-auth: true
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@oviva-ag"
-      - name: Set branch name
-        run: |
-          echo "TICKET_NAME=$(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')" >> ${GITHUB_ENV}
-      - name: Fetch
-        run: |
-          git branch --show-current
-          echo $(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')
-          git config --global user.name 'danielgrieb-oviva'
-          git config --global user.email 'danielgrieb@oviva.com'
-          git fetch
-      - name: Update gh-pages branch with new build
-        run: |
-          npm install --silent
-          sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
-          npm run build --silent
-          git switch --force ${TARGET_BRANCH}
-          echo ${BUILD_DIR}
-          echo ${TICKET_NAME}
-          rm -rf ./${TICKET_NAME}
-          mv ./${BUILD_DIR} ./${TICKET_NAME}
-      - name: Push changes
-        run: |
-          git add ./${TICKET_NAME}/*
-          git diff-index --quiet HEAD || git commit -am "deploy static files"
-          git push --force origin ${TARGET_BRANCH}
+# jobs:
+#   deploy-branch:
+#     runs-on: ubuntu-18.04
+#     env:
+#       TARGET_BRANCH: gh-pages
+#       BUILD_DIR: build
+#       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#       - name: Use Node.js 16
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 16
+#           always-auth: true
+#           registry-url: "https://npm.pkg.github.com"
+#           scope: "@oviva-ag"
+#       - name: Set branch name
+#         run: |
+#           echo "TICKET_NAME=$(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')" >> ${GITHUB_ENV}
+#       - name: Fetch
+#         run: |
+#           git branch --show-current
+#           echo $(git branch --show-current | sed -r 's/^.*\/(.*)$/\1/')
+#           git config --global user.name 'danielgrieb-oviva'
+#           git config --global user.email 'danielgrieb@oviva.com'
+#           git fetch
+#       - name: Update gh-pages branch with new build
+#         run: |
+#           npm install --silent
+#           sed -i 's/.*homepage.*/"homepage": "\.\/",/' ./package.json
+#           npm run build --silent
+#           git switch --force ${TARGET_BRANCH}
+#           echo ${BUILD_DIR}
+#           echo ${TICKET_NAME}
+#           rm -rf ./${TICKET_NAME}
+#           mv ./${BUILD_DIR} ./${TICKET_NAME}
+#       - name: Push changes
+#         run: |
+#           git add ./${TICKET_NAME}/*
+#           git diff-index --quiet HEAD || git commit -am "deploy static files"
+#           git push --force origin ${TARGET_BRANCH}
